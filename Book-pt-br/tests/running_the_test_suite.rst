@@ -1,99 +1,99 @@
 .. _runing_the_test_suite:
 
-Running the test suite
-======================
+Executando a suíte de testes
+============================
 
-Now that we have an basic understanding of what kind of testing we're doing, let's run the test suite. Before we can run
-the tests, make sure you have successfully built php from source (see :ref:`building_php`) and you have an executable
-at ``sapi/cli/php``.
+Agora que temos um entendimento básico de qual tipo de teste estamos fazendo, vamos executar a suíte de testes. Antes que possamos rodar
+os testes, tenha certeza que você compilou com sucesso o php a partir do fonte e que você tem um executável
+em ``sapi/cli/php``.
 
-There are two ways to run the test suite.
+Existem duas formas de executar a suíte de testes.
 
-Running tests directly with ``run-tests.php``
----------------------------------------------
+Execução dos testes diretamente com o ``run-tests.php``
+-------------------------------------------------------
 
-You can run the test suite directly with run-tests.php. At minimum you'll need to specify the php executable that you
-wish to test against which you can do with the ``-p`` flag. Note that in order to run all tests correctly this should be
-an absolute path to the PHP executable.
+Você pode rodar a suíte de testes diretamente com o run-tests.php. No mínimo você precisa especificar qual o executável php que você
+gostaria de usar o que você pode fazer usando a flag ``-p``. Perceba que para rodar todos os testes corretamente deve ser passado
+um caminho absoluto para o executável PHP.
 
 .. code-block:: bash
 
     ~/php-src> sapi/cli/php run-tests.php -p `pwd`/sapi/cli/php
 
-A shortcut flag you can use to tell run-tests to test against the PHP executable that is currently invoked is by using
-the ``-P`` flag.
+Um meio de usar um atalho que você pode usar para dizer ao run-tests que use o executável PHP que está sendo invocado no momento
+é com a flag ``-P``.
 
 .. code-block:: bash
 
     ~/php-src> sapi/cli/php run-tests.php -P
 
-If you don't want to have to set the ``-p`` or ``-P`` flag every time, you could specify the php executable with the
-``TEST_PHP_EXECUTABLE`` environment variable which can be set with ``export`` on Linux machines.
+Se você não quiser definir a flag `-p`` ou a ``-P`` todas as vezes, você pode especificar o executável php usando
+a variável de ambiente ``TEST_PHP_EXECUTABLE`` que pode ser definida com o comando ``export`` em máquinas Linux.
 
 .. code-block:: bash
 
     ~/php-src> export TEST_PHP_EXECUTABLE=sapi/cli/php
     ~/php-src> sapi/cli/php run-tests.php
 
-On Windows you can set the environment variable using ``set``.
+No Windows, você pode definir a variável de ambiente usando ``set``.
 
 .. code-block:: bash
 
     C:\php-src> set TEST_PHP_EXECUTABLE=sapi/cli/php
     C:\php-src> sapi/cli/php run-tests.php
 
-By default ``run-tests.php`` will start running all 15,000+ tests in the test suite which would take forever-ever. You
-can specify a target folder of tests to run or even a single test. The following example will run all the tests
-associated with `PHP 7's CSPRNG`_.
+Por padrão ``run-tests.php`` irá começar rodando todos os mais de 15.000 da suíte, o que pode demorar um tempão. Você
+pode especificar uma pasta específica de testes para rodar ou mesmo um teste único. O seguinte exemplo irá executar todos os testes
+associados com `PHP 7's CSPRNG`_.
 
 .. code-block:: bash
 
     ~/php-src> sapi/cli/php run-tests.php -P ext/standard/tests/random
 
-You can also specify multiple target folders or files to run.
+Você também pode especificar múltiplos diretórios ou arquivos alvo para rodar.
 
 .. code-block:: bash
 
     ~/php-src> sapi/cli/php run-tests.php -P Zend/ ext/reflection/ ext/standard/tests/array/
 
-Hopefully all the tests will have passed. If not... oops.
+Com sorte, todos os testes passaram. Caso contrário... oops.
 
 .. _PHP 7's CSPRNG: http://php.net/csprng
 
-Running tests via the ``Makefile`` (recommended)
-------------------------------------------------
+Execução dos testes via ``Makefile`` (recomendado)
+--------------------------------------------------
 
-The recommended way of running the test suite is via the ``test`` target which is defined in the ``Makefile``. The
-``test`` target does all the hard work of specifying the PHP executable for you (the one you compiled), setting up some
-default INI settings and specifying the best run-tests flags for you. You needn't worry about setting environment
-variables or setting additional flags so the command is very simple.
+A forma recomendada de rodar a suíte de testes é via comando ``test`` que é definido no ``Makefile``. O
+comando ``test`` faz todo o trabalho duro de especificar o executável PHP para você (aquele que você compilou), definir algumas
+configurações INI padrões e especificar as melhores flags do run-tests para você. Você nem precisa se preocupar em configurar
+variáveis de ambiente nem definir flags adicionais, sendo um comando bem simples.
 
 .. code-block:: bash
 
     ~/php-src> make test
 
-As before, ``run-tests.php`` will start running the entire test suite. To specify a folder or single test to execute you
-can pass ``make`` a ``TESTS`` variable. The following example will test that PHP can handle binary literals properly.
+Como antes, ``run-tests.php`` começará a rodar a suíte de testes inteira. Para especificar uma pasta ou um teste único para ser executado você
+pode passar para o ``make`` uma variável ``TESTS``. O exemplo a seguir irá testar se o PHP pode operar com binários literais adequadamente.
 
 .. code-block:: bash
 
     ~/php-src> make test TESTS=Zend/tests/binary.phpt
 
-You can specify multiple target folders or files to run by separating each path with a space in the ``TESTS`` variable.
+Você pode especificar múltipos diretórios ou arquivos alvo para serem executados separando cada caminho por um espaço na variável ``TESTS``.
 
 .. code-block:: bash
 
     ~/php-src> make test TESTS="Zend/ ext/reflection/ ext/standard/tests/array/"
 
-Executing tests in parallel
----------------------------
+Execução de testes em paralelo
+------------------------------
 
-You can't.
+Isso não é possível.
 
-More options
-------------
+Mais opções
+-----------
 
-For a full list of supported options that run-tests supports, just run it with ``--help``.
+Para uma lista completa das opções que run-tests suporta, rode-o seguido de ``--help``.
 
 .. code-block:: bash
 

@@ -1,8 +1,8 @@
 --TEST--
-echo - basic test for echo language construct
+echo - Teste básico para a construção de linguagem echo
 --FILE--
 <?php
-echo 'This works ', 'and takes args!';
+echo 'Funciona ', 'e recebe argumentos!';
 ?>
 --EXPECT--
-This works and takes args!
+Funciona e recebe argumentos!

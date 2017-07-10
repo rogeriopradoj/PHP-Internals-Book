@@ -1,53 +1,53 @@
 .. _phpt_file_structure:
 
-The ``.phpt`` file structure
-============================
+A estrutura de um arquivo ``.phpt``
+===================================
 
-Now that we know how to run the tests with run-tests, let's dive into a phpt file in more detail. A phpt file is just a
-normal PHP file but it contains a number of different sections which run-tests supports.
+Agora que sabemos como rodar os testes com o run-tests, vamos nos aprofundar em um arquivo phpt com mais detalhes. Um arquivo phpt é apenas um
+arquivo PHP normal que contém uma quantidade de diferentes seções que o run-tests suporta.
 
-A basic test example
---------------------
+Um exemplo básico de teste
+--------------------------
 
-Here's a basic example of a PHP source test that tests the ``echo`` construct.
+Aqui tem um exemplo básico de um teste do fonte do PHP que testa a construção ``echo``.
 
 .. literalinclude:: echo_basic.phpt
    :language: php
 
-Did you know that `echo can take a list of arguments`_? Well you do now.
+Você sabia que o `echo pode receber uma lista de argumentos`_? Bem, agora você sabe.
 
-There are `many more sections`_ that are available to us in a phpt file, but these three are the bare-minimum required.
-The ``--EXPECT--`` section has a few variations but we'll get into describing the sections in just a bit.
+Existem `muitas outras seções`_ que ficam disponíveis para nós em um arquivo phpt, mas essas três são as minimamente necessárias.
+A seção ``--EXPECT--`` tem algumas poucas variações mas nós vamos entrar na descrição das seções daqui a pouco.
 
-Notice that of the three sections, we have everything we need to run a black-box test. We have a name for the test, a
-bit of code and the expected output. Again, black-box testing doesn't care *how* the code runs, it only concerns itself
-with the end result.
+Perceba que dessas três seções, nós temos tudo que precisamos para rodar um teste caixa-preta. Temos um nome para o teste, um
+trecho de código e o resultado esperado. Novamente, um teste caixa-preta não se importa em *como* o código roda, ele se preocupa apenas
+com o resultado final.
 
-.. _echo can take a list of arguments: http://php.net/manual/en/function.echo.php
-.. _many more sections: http://qa.php.net/phpt_details.php
+.. _echo pode receber uma lista de argumentos: http://php.net/manual/en/function.echo.php
+.. _muitas outras seções: http://qa.php.net/phpt_details.php
 
-Some notable sections
----------------------
+Algumas seções importantes
+--------------------------
 
-Now that we've seen the three required sections for every  ``.phpt`` file let's take a look a few other common sections
-we'll no doubt encounter.
+Agora que vimos as três seções obrigatórias em todo arquivo ``.phpt`` vamos dar uma olhada em algumas outras seções comuns
+que sem dúvida vamos encontrar.
 
-``--TEST--`` : The name of the test
-    The `--TEST-- section`_ just describes the test (for humans) in one line. This will be displayed in the console when
-    the test is run, so it's good to be descriptive but not overly verbose. If your test needs a longer description, add
-    a `--DESCRIPTION-- section`_.
+``--TEST--`` : O nome do teste
+    A `seção --TEST--`_ apenas descreve o teste (para humanos) em uma linha. Ela será mostrada no console quando
+    o teste for executado, por isso é bom que seja descritivo mas não verboso demais. Se seu teste precisar de uma descrição mais longa, adicione
+    uma `seção --DESCRIPTION--`_.
     
     .. code-block:: php
     
         --TEST--
         json_decode() with large integers
 
-    .. note:: The ``--TEST--`` section must be the very first line of the phpt file. Otherwise run-tests will not
-              consider it to be a valid test file and mark the test as "borked".
+    .. note:: A seção ``--TEST--`` precisa ser a primeira linha de um arquivo phpt. Caso contrário o run-tests não
+              o considerará como um arquivo de teste válido e marcará o teste como "quebrado".
 
-``--FILE--`` : The PHP code to run
-    The `--FILE-- section`_ is the PHP code that we want to test. In our above example we're making sure the ``echo``
-    construct can take a list of arguments and concatenate them into standard out.
+``--FILE--`` : O código PHP a ser executado
+    A `seção --FILE--`_ é o código PHP que vamos quere testar. Em nosso exemplo acima queremos garantir que a construção
+    ``echo`` pode receber uma lista de argumentos e concatená-los na saída padrão (standard out).
 
     .. code-block:: php
     
@@ -61,15 +61,15 @@ we'll no doubt encounter.
         echo "Done\n";
         ?>
 
-    .. note:: Although it is considered a best-practice to leave off the closing PHP tag (``?>``) in userland, this is
-              not the case with a phpt file. If you leave off the closing PHP tag, run-tests will have no trouble
-              running your test, but your test will no longer be able to run as a normal PHP file. It will also make
-              your IDE go bonkers. So always remember to include the closing PHP tag in every ``--FILE--`` section.
+    .. note:: Embora seja considerada uma boa prática não usar a tag de fechamento PHP (``?>``) no *userland*, isso não acontece
+              com um arquivo phpt. Se você não usar a tag de fechamento PHP, o run-tests não terá problemas
+              para executar seu teste, mas ele não poderá mais ser executado como um arquivo PHP normal. Ele também fará
+              com que sua IDE fique maluca. Por isso sempre lembre de incluir a tag de fechamento PHP em toda seção ``--FILE--``.
 
-``--EXPECT--`` : The expected output
-    The `--EXPECT-- section`_ contains exactly what we would expect to see from standard output. If you're expecting
-    fancy assertions like you get in `PHPUnit`_, you won't get any here. Remember, these are *`functional tests`_* so we
-    just examine the output after providing inputs.
+``--EXPECT--`` : A saída esperada
+    A `seção --EXPECT--`_ contém exatamente o que esperamos ver na saída padrão. Se você estiver esperando
+    asserções sofisticadas como a que você tem no `PHPUnit`_, você não receberá nenhuma delas aqui. Lembre-se, estes são *`testes funcionais`_* que
+    apenas examinam a saída após o fornecimento de entradas.
     
     .. code-block:: php
     
@@ -78,14 +78,14 @@ we'll no doubt encounter.
         string(30) "123456789012345678901234567890"
         Done
 
-    .. note:: Trailing new lines are trimmed off by run-tests for both the expected and actual output so you don't have
-              to worry about adding or removing trailing new lines at the end of the ``--EXPECT--`` section.
+    .. note:: As novas linhas finais são removidas pelo run-tests tanto da saída esperada quando da real, assim você não tem que
+              se preocupar em adicionar ou remover novas linhas finais no fim da seção ``--EXPECT--``.
 
-``--EXPECTF--`` : The expected output with substitution
-    Because the tests need to run on a multitude of environments, we often times may not know what the actual output
-    of a script will be. Or perhaps the functionality that your testing is nondeterministic. For this use case we have
-    the `--EXPECTF-- section`_ which allows us to substitute sections of output with substitution characters much
-    like the `sprintf() function`_ in PHP.
+``--EXPECTF--`` : A saída esperada com substituição
+    Como os testes precisam rodar em uma variedade de ambientes, muitas vezes não saberemos qual será a saída real
+    de um script. Ou talvez a funcionalidade que estamos testando seja não-determinística. Para esse caso de uso nós temos
+    a `seção --EXPECTF--`_ que nos permite substituir seções da saída com caracteres de substituição bem
+    parecidos com a `função sprintf()`_ em PHP.
     
     .. code-block:: php
     
@@ -93,11 +93,11 @@ we'll no doubt encounter.
         string(%d) "%s"
         Done
     
-    This is particularly handy when creating error-case tests that output the absolute path to the PHP file; something
-    that would vary from environment to environment.
-    
-    Below is an abbreviated error-case example taken from `a real test`_ of the `password hashing functions`_ which
-    makes use of the ``--EXPECTF--`` section.
+    Isto é particularmente útil quando estamos criando testes com casos de erro que imprimem o caminho absoluto do arquivo PHP; algo
+    que deve variar de ambiente para ambiente.
+
+    Abaixo está um exemplo abreviado de caso de erro retirado de `um teste real`_ das `funções de password hashing`_ que
+    usa a seção ``--EXPECTF--``.
     
     .. code-block:: php
     
@@ -111,116 +111,116 @@ we'll no doubt encounter.
         Warning: password_hash(): Invalid bcrypt cost parameter specified: 3 in %s on line %d
         NULL
 
-``--SKIPIF--`` : Conditions that a test should be skipped
-    Since PHP can be configured with myriad options, the build of PHP that you're running might not be compiled with the
-    required dependencies that are needed to run a test. The case where this is most common is the extension tests.
+``--SKIPIF--`` : Condições para que um teste seja ignorado
+    Como o PHP pode ser configurado com uma miríade de opções, a compilação do PHP que você está rodando pode não ter sido compilada com as
+    dependências necessárias para executar um teste. O caso onde isso é mais comum é com teste de extensões.
     
-    If a test needs an extension installed in order to run the test will have a `--SKIPIF-- section`_ which checks that
-    the extension is indeed installed.
+    Se um teste precisar de uma extensão instalada para que consiga rodar ele precisará ter uma `seção --SKIPIF--`_ que verifica se
+    a extensão está realmente instalada.
     
     .. code-block:: php
     
         --SKIPIF--
         <?php if (!extension_loaded('json')) die('skip ext/json must be installed'); ?>
     
-    Any tests that meet the ``--SKIPIF--`` condition will be marked as "skipped" by run-tests and continue on to the
-    next test in the queue. Any text after the word "skip" will be returned in the output when you run the test from
-    run-tests as the reason why the test was skipped.
+    Qualquer teste que atenda à condição de ``--SKIPIF--`` será marcado como "skipped" pelo run-tests que continuará rodando o
+    próximo teste na fila. Todo texto depois da palavra "skip" será retornado na saída quando você rodar o teste a partir
+    do run-tests mostrando o motivo pelo qual o teste foi ignorado.
     
-    Many of the tests will halt the script execution with `die()`_ or `exit()`_ if the ``--SKIPIF--`` condition is met
-    as in the example above. It is important to understand that just because you ``die()`` in a ``--SKIPIF--`` section,
-    that does not mean run-tests will skip your test. Run-tests simply examines the output of ``--SKIPIF--`` and looks
-    for the word "skip" as the first four characters. If the first word is not "skip", the test will not be skipped.
+    Muitos dos testes interromperão a execução do script com `die()`_ ou `exit()`_ se a condição em ``--SKIPIF-- for atendida
+    como no exemplo acima. É importante entender que só porque você colocou ``die()`` em uma seção ``--SKIPIF--``,
+    isso não significa que o run-tests irá ignorar seu teste. O run-tests apenas examina a saída de ``--SKIPIF--`` e procura
+    pela palavra "skip" como os primeiros quatro caracteres. Se a primeira palavra não for "skip", o teste não será ignorado.
     
-    In fact, you don't have to halt execution at all as long as "skip" is the first word of the output.
+    Na verdade, você não tem que interromper a execução em nenhum momento desde que "skip" seja a primeira palavra na saída.
     
-    The following example will skip a test. Note how we didn't halt the script execution.
+    O seguinte exemplo irá ignorar um teste. Perceba que nós não interrompemos a execução do script.
     
     .. code-block:: php
     
         --SKIPIF--
         <?php if (!extension_loaded('json')) echo 'skip'; ?>
     
-    By contrast, examine the following example. Notice how it halts script execution but since the word "skip" isn't the
-    the first word in the output, run-tests will still happily run the test without skipping it.
+    Em contraste, examine o exemplo a seguir. Perceba como ele interrompe a execução do script mas como a palavra "skip" não
+    é a primeira palavra na saída, o run-tests continuará a rodar o teste alegremente sem ignorá-lo.
     
     .. code-block:: php
     
         --SKIPIF--
         <?php if (!extension_loaded('json')) exit; ?>
     
-    .. note:: Although it is not required to halt script execution in the ``--SKIPIF--`` section, it is always highly
-              recommended so that you can still run the phpt file as a normal php file and see a nice message like "skip
-              ext/json must be installed" instead of getting a ton of random errors.
+    .. note:: Embora não seja obrigatório interromper a execução do script na seção ``--SKIPIF--``, é altamente
+              recomendado fazê-lo assim você pode continuar a rodar o arquivo phpt como um arquivo php normal e ver uma mensagem agradável como "skip
+              ext/json must be installed" em vez de receber um monte de erros aleatórios.
 
 ``--INI--``
-    Sometimes tests rely on having very specific INI settings set. In this case you can define any INI settings with the
-    `--INI-- section`_. Each INI setting is place on a new line within the section.
+    Às vezes os testes necessitam que configurações INI bem específicas estejam definidas. Nesse caso você pode definir qualquer configuração INI com a
+    `seção --INI--`_. Cada configuração INI é colocada em uma nova linha dentro da seção.
     
     .. code-block:: php
     
         --INI--
         date.timezone=America/Chicago
     
-    Run-tests does all the magic involved with setting the INI configuration for you.
+    O run-tests faz para você toda a mágica que envolve definir as configurações INI.
 
-.. _--TEST-- section: http://qa.php.net/phpt_details.php#test_section
-.. _--DESCRIPTION-- section: http://qa.php.net/phpt_details.php#description_section
-.. _--FILE-- section: http://qa.php.net/phpt_details.php#file_section
-.. _--EXPECT-- section: http://qa.php.net/phpt_details.php#expect_section
+.. _seção --TEST--: http://qa.php.net/phpt_details.php#test_section
+.. _seção --DESCRIPTION--: http://qa.php.net/phpt_details.php#description_section
+.. _seção --FILE--: http://qa.php.net/phpt_details.php#file_section
+.. _seção --EXPECT--: http://qa.php.net/phpt_details.php#expect_section
 .. _PHPUnit: https://phpunit.de/
-.. _functional tests: https://en.wikipedia.org/wiki/Functional_testing
-.. _--EXPECTF-- section: http://qa.php.net/phpt_details.php#expectf_section
-.. _sprintf() function: http://php.net/sprintf
-.. _a real test: https://github.com/php/php-src/blob/master/ext/standard/tests/password/password_bcrypt_errors.phpt
-.. _password hashing functions: http://php.net/password
-.. _--SKIPIF-- section: http://qa.php.net/phpt_details.php#skipif_section
+.. _testes funcionais: https://en.wikipedia.org/wiki/Functional_testing
+.. _seção --EXPECTF--: http://qa.php.net/phpt_details.php#expectf_section
+.. _função sprintf(): http://php.net/sprintf
+.. _um teste real: https://github.com/php/php-src/blob/master/ext/standard/tests/password/password_bcrypt_errors.phpt
+.. _funções de password hashing: http://php.net/password
+.. _seção --SKIPIF--: http://qa.php.net/phpt_details.php#skipif_section
 .. _die(): http://php.net/die
 .. _exit(): http://php.net/exit
-.. _--INI-- section: http://qa.php.net/phpt_details.php#ini_section
+.. _seção --INI--: http://qa.php.net/phpt_details.php#ini_section
 
-Writing a simple test
----------------------
+Escrita de um teste simples
+---------------------------
 
-Let's write our first test just to get familiar with the process.
+Vamos escrever nosso primeiro teste apenas para ficarmos familiarizados com o processo.
 
-Typically tests are stored in a ``tests/`` directory that lives near the code we want to test. For example, the `PDO
-extension`_ is found at ``ext/pdo`` in the PHP source code. If you open that directory, you'll see a `tests/ directory`_
-with lots of ``.phpt`` files in it. All the other extensions are set up the same way. There are also tests for the Zend
-engine which are located in `Zend/tests/`_.
+Normalmente os testes são armazenados em um diretório ``tests/`` que fica junto ao código que queremos testar. Por exemplo, a `extensão
+PDO`_ é encontrada em ``ext/pdo`` no código fonte do PHP. Se você abrir esse diretório, verá um `diretório tests/`_
+com vários arquivos ``.phpt`` dentro dele. Todas as outras extensões são definidas da mesma forma. Também existem testes para o Zend
+engine que estão localizados em `Zend/tests/`_.
 
-For this example, we'll just temporarily create a test in the root ``php-src`` directory. Create and open a new file
-with your favorite editor.
+Para este exemplo, vamos criar temporariamente um arquivo de teste no diretório raiz do ``php-src``. Crie e abra um novo arquivo
+com seu editor favorito.
 
 .. code-block:: bash
 
     $ vi echo_basic.phpt
 
-.. note:: If you've never used vim before, you'll probably be stuck after running the command above. Just press
-          ``<esc>`` a bunch of times and then type ``:q!`` and it should poop you back out to the terminal. You can just
-          use your favorite editor for this part instead of vim. And then when you get an extra second later on, `learn
+.. note:: Se você nunca tiver usado o vim, provavelmente ficará travado depois de rodar o comando acima. Apenas aperte
+          ``<esc>`` alguma vezes e então digite ``:q!`` e isso deve te levar de volta para o seu terminal. Você pode
+          usar seu editor favorito para esta parte em vez do vim. E então quanto tiver um tempo no futuro, `aprenda
           vim`_.
 
-Now copy and paste the example test from above into the new test file. Here's the test file again to save you some
-scrolling around.
+Agora copie e cole o teste de exemplo daqui de cima para o seu arquivo de teste novo. Aqui está novamente o arquivo de teste para te economizar
+algum tempo de rolagem.
 
 .. literalinclude:: echo_basic.phpt
    :language: php
 
-After you save the file as ``echo_basic.phpt`` in the root of the PHP source code and exit your editor, run the example
-test with make.
+Depois que você salvar o arquivo como ``echo_basic.phpt`` na raiz do código fonte PHP e sair de seu editor, execute o teste
+de exemplo usando o make.
 
 .. code-block:: bash
 
     $ make test TESTS=echo_basic.phpt
 
-If everything worked, you'll see the following passing test summary.
+Se tudo tiver funcionado, você verá o seguinte resumo do teste passando.
 
 .. code-block:: bash
 
     =====================================================================
     Running selected tests.
-    PASS echo - basic test for echo language construct [echo_basic.phpt]
+    PASS echo - Teste básico para a construção de linguagem echo [echo_basic.phpt]
     =====================================================================
     Number of tests :    1                 1
     Tests skipped   :    0 (  0.0%) --------
@@ -232,31 +232,31 @@ If everything worked, you'll see the following passing test summary.
     Time taken      :    0 seconds
     =====================================================================
 
-Notice how text from the ``--TEST--`` section of the test is being displayed in the console:
+Perceba como o texto da seção ``--TEST--`` do teste está sendo mostrada no console:
 
 .. code-block:: bash
 
-    PASS echo - basic test for echo language construct [echo_basic.phpt]
+    PASS echo - Teste básico para a construção de linguagem echo [echo_basic.phpt]
 
-To illustrate the point that black-box testing only cares about the output, let's change the PHP code in the
-``--FILE--`` section and keep everything else the same.
+Para ilustar a afirmação de que o teste caixa-preta apenas se importa com a saída, vamos alterar o código PHP na
+seção ``--FILE--`` e manter todo o restante da mesma forma.
 
 .. code-block:: php
 
     <?php
     const BANG = '!';
     class works {}
-    echo sprintf('This %s and takes args%s', works::class, BANG);
+    echo sprintf('%s e recebe argumentos%s', works::class, BANG);
     ?>
 
-Now let's run the test again.
+Agora vamos executar o teste novamente.
 
 .. code-block:: bash
 
     $ make test TESTS=echo_basic.phpt
 
-The test should still pass because the expected output is still the same as it was before. Let's try another example.
-Replace the PHP code in the ``--FILE--`` section of the test with the following code and then run the test again.
+O teste deve continuar passando pois a saída esperada continua sendo a mesma que antes. Vamos tentar outro exemplo.
+Substitua o código PHP da seção ``--FILE--`` do teste pelo seguinte código e então execute o teste novamente.
 
 .. code-block:: php
 
@@ -266,12 +266,12 @@ Replace the PHP code in the ``--FILE--`` section of the test with the following 
     echo file_get_contents($url);
     ?>
 
-Although this one looks obscure, I set up a `Gist with the expected output`_ and we're just dumping the body of an HTTP
-request to that Gist. Unless there are network connection issues or if the gist gets deleted, this will produce the same
-output as the other bits of code and the test will still pass. This will fail if you don't have the `ext/openssl`_
-extension installed since the Gist is behind https.
+Embora possa parecer obscuro, eu defini um `Gist com o resultado esperado`_ e nós estamos apenas jogando o body de uma
+requisição HTTP para aquele Gist. A menos que tenhamos problema com conexão de rede ou se o gist for deletado, isso irá produzir a mesma
+saída que os outros trechos de código e o teste continua passando. Ele irá falhar se você não tiver a extensão `ext/openssl`_
+instalado uma vez que o Gist está atras.
 
-Let's try one more example. Replace the PHP code in the ``--FILE--`` section with the following.
+Vamos tentar mais um exemplo. Substitua o código PHP na seção ``--FILE--`` pelo seguinte.
 
 .. code-block:: php
 
@@ -292,14 +292,14 @@ Let's try one more example. Replace the PHP code in the ``--FILE--`` section wit
     echo $foo;
     ?>
 
-Crazy, right? This will take a few seconds just to output a simple string and you'd never do this in real life, but the
-test will still pass. Run-tests does not care that that your code is slow [#]_ or inefficient or just terrible, if the
-expected output matches the actual output, your test will be in the green.
+Louco, não? Ele vai levar alguns segundos apenas para retornar uma string única e você nunca faz isso na vida real, mas o
+teste vai continuar passando. O run-tests não se importa se o seu código é lento [#]_, ineficiente ou apenas terrível, se
+o resultado esperado bater com a saída real, sei teste será da cor verde.
 
-.. _PDO extension: http://php.net/pdo
-.. _tests/ directory: https://github.com/php/php-src/tree/master/ext/pdo/tests
+.. _Extensão PDO: http://php.net/pdo
+.. _diretório tests/: https://github.com/php/php-src/tree/master/ext/pdo/tests
 .. _Zend/tests/: https://github.com/php/php-src/tree/master/Zend/tests
-.. _learn vim: https://www.google.com/search?q=learn+vim
-.. _Gist with the expected output: https://gist.githubusercontent.com/SammyK/9c7bf6acdc5bcaa2cfbb404adc61abe6/raw/04af30473fc78033f7d8941ecd567934b0f804c0/foo-phpt-output.txt
+.. _aprenda vim: https://www.google.com/search?q=learn+vim
+.. _Gist com o resultado esperado: https://gist.githubusercontent.com/SammyK/9c7bf6acdc5bcaa2cfbb404adc61abe6/raw/04af30473fc78033f7d8941ecd567934b0f804c0/foo-phpt-output.txt
 .. _ext/openssl: http://php.net/openssl
 .. [#] **Timeouts:** The default timeout for run-tests is 60 seconds (or 300 seconds when testing for memory leaks) but you can specify a different timeout using the ``--set-timeout`` flag.

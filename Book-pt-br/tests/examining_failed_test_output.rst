@@ -1,12 +1,12 @@
 .. _examining_failed_test_output:
 
-Examining failed test output
-============================
+Examinando a saída dos testes falhos
+====================================
 
-We've learned how to create and run tests and have had great success with passing tests, but what happens when things go
-wrong? We'll examine how to help ourselves debug failed tests using the failed-test output files.
+Aprendemos como criar e executar testes e fomos bem sucedidos com os testes passando, mas o que acontece quando as coisas
+derem errado? Vamos examinar como depuramos os testes falhos usando os arquivos de saída gerados por eles.
 
-Failed test output files
-------------------------
+Arquivos de saída dos testes falhos
+-----------------------------------
 
-@TODO Add all the rest here. :)
+@TODO Adicionar todo o restante aqui. :)
