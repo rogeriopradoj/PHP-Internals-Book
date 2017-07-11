@@ -15,7 +15,7 @@ A escrita de testes se aplica tanto ao PHP 5 quanto ao PHP 7.
     tests/phpt_file_structure.rst
     tests/examining_failed_test_output.rst
 
-Indíce e referência
+Índice e referência
 ===================
 
 * :ref:`genindex`
