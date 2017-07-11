@@ -1,0 +1,142 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt_BR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Executando a suíte de testes &#8212; PHP Internals Book</title>
+    <link rel="stylesheet" href="../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/style.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <link rel="index" title="Índice" href="../genindex.html" />
+    <link rel="search" title="Buscar" href="../search.html" />
+    <link rel="next" title="A estrutura de um arquivo .phpt" href="phpt_file_structure.html" />
+    <link rel="prev" title="Visão geral dos testes" href="overview.html" /> 
+  </head>
+  <body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../index.html">
+          <span>PHP Internals Book</span></a></h1>
+        <h2 class="heading"><span>Executando a suíte de testes</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        «&#160;&#160;<a href="overview.html">Visão geral dos testes</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="../index.html">Conteúdos</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="phpt_file_structure.html">A estrutura de um arquivo <code class="docutils literal"><span class="pre">.phpt</span></code></a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="executando-a-suite-de-testes">
+<span id="runing-the-test-suite"></span><h1>Executando a suíte de testes<a class="headerlink" href="#executando-a-suite-de-testes" title="Link permanente para este título">¶</a></h1>
+<p>Agora que temos um entendimento básico de qual tipo de teste estamos fazendo, vamos executar a suíte de testes. Antes que possamos rodar
+os testes, tenha certeza que você compilou com sucesso o php a partir do fonte e que você tem um executável
+em <code class="docutils literal"><span class="pre">sapi/cli/php</span></code>.</p>
+<p>Existem duas formas de executar a suíte de testes.</p>
+<div class="section" id="execucao-dos-testes-diretamente-com-o-run-tests-php">
+<h2>Execução dos testes diretamente com o <code class="docutils literal"><span class="pre">run-tests.php</span></code><a class="headerlink" href="#execucao-dos-testes-diretamente-com-o-run-tests-php" title="Link permanente para este título">¶</a></h2>
+<p>Você pode rodar a suíte de testes diretamente com o run-tests.php. No mínimo você precisa especificar qual o executável php que você
+gostaria de usar o que você pode fazer usando a flag <code class="docutils literal"><span class="pre">-p</span></code>. Perceba que para rodar todos os testes corretamente deve ser passado
+um caminho absoluto para o executável PHP.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>~/php-src&gt; sapi/cli/php run-tests.php -p <span class="sb">`</span><span class="nb">pwd</span><span class="sb">`</span>/sapi/cli/php
+</pre></div>
+</div>
+<p>Um meio de usar um atalho que você pode usar para dizer ao run-tests que use o executável PHP que está sendo invocado no momento
+é com a flag <code class="docutils literal"><span class="pre">-P</span></code>.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>~/php-src&gt; sapi/cli/php run-tests.php -P
+</pre></div>
+</div>
+<p>Se você não quiser definir a flag <cite>-p`</cite> ou a <code class="docutils literal"><span class="pre">-P</span></code> todas as vezes, você pode especificar o executável php usando
+a variável de ambiente <code class="docutils literal"><span class="pre">TEST_PHP_EXECUTABLE</span></code> que pode ser definida com o comando <code class="docutils literal"><span class="pre">export</span></code> em máquinas Linux.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>~/php-src&gt; <span class="nb">export</span> <span class="nv">TEST_PHP_EXECUTABLE</span><span class="o">=</span>sapi/cli/php
+~/php-src&gt; sapi/cli/php run-tests.php
+</pre></div>
+</div>
+<p>No Windows, você pode definir a variável de ambiente usando <code class="docutils literal"><span class="pre">set</span></code>.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>C:<span class="se">\p</span>hp-src&gt; <span class="nb">set</span> <span class="nv">TEST_PHP_EXECUTABLE</span><span class="o">=</span>sapi/cli/php
+C:<span class="se">\p</span>hp-src&gt; sapi/cli/php run-tests.php
+</pre></div>
+</div>
+<p>Por padrão <code class="docutils literal"><span class="pre">run-tests.php</span></code> irá começar rodando todos os mais de 15.000 da suíte, o que pode demorar um tempão. Você
+pode especificar uma pasta específica de testes para rodar ou mesmo um teste único. O seguinte exemplo irá executar todos os testes
+associados com <a class="reference external" href="http://php.net/csprng">PHP 7’s CSPRNG</a>.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>~/php-src&gt; sapi/cli/php run-tests.php -P ext/standard/tests/random
+</pre></div>
+</div>
+<p>Você também pode especificar múltiplos diretórios ou arquivos alvo para rodar.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>~/php-src&gt; sapi/cli/php run-tests.php -P Zend/ ext/reflection/ ext/standard/tests/array/
+</pre></div>
+</div>
+<p>Com sorte, todos os testes passaram. Caso contrário… oops.</p>
+</div>
+<div class="section" id="execucao-dos-testes-via-makefile-recomendado">
+<h2>Execução dos testes via <code class="docutils literal"><span class="pre">Makefile</span></code> (recomendado)<a class="headerlink" href="#execucao-dos-testes-via-makefile-recomendado" title="Link permanente para este título">¶</a></h2>
+<p>A forma recomendada de rodar a suíte de testes é via comando <code class="docutils literal"><span class="pre">test</span></code> que é definido no <code class="docutils literal"><span class="pre">Makefile</span></code>. O
+comando <code class="docutils literal"><span class="pre">test</span></code> faz todo o trabalho duro de especificar o executável PHP para você (aquele que você compilou), definir algumas
+configurações INI padrões e especificar as melhores flags do run-tests para você. Você nem precisa se preocupar em configurar
+variáveis de ambiente nem definir flags adicionais, sendo um comando bem simples.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>~/php-src&gt; make <span class="nb">test</span>
+</pre></div>
+</div>
+<p>Como antes, <code class="docutils literal"><span class="pre">run-tests.php</span></code> começará a rodar a suíte de testes inteira. Para especificar uma pasta ou um teste único para ser executado você
+pode passar para o <code class="docutils literal"><span class="pre">make</span></code> uma variável <code class="docutils literal"><span class="pre">TESTS</span></code>. O exemplo a seguir irá testar se o PHP pode operar com binários literais adequadamente.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>~/php-src&gt; make <span class="nb">test</span> <span class="nv">TESTS</span><span class="o">=</span>Zend/tests/binary.phpt
+</pre></div>
+</div>
+<p>Você pode especificar múltipos diretórios ou arquivos alvo para serem executados separando cada caminho por um espaço na variável <code class="docutils literal"><span class="pre">TESTS</span></code>.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>~/php-src&gt; make <span class="nb">test</span> <span class="nv">TESTS</span><span class="o">=</span><span class="s2">&quot;Zend/ ext/reflection/ ext/standard/tests/array/&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="execucao-de-testes-em-paralelo">
+<h2>Execução de testes em paralelo<a class="headerlink" href="#execucao-de-testes-em-paralelo" title="Link permanente para este título">¶</a></h2>
+<p>Isso não é possível.</p>
+</div>
+<div class="section" id="mais-opcoes">
+<h2>Mais opções<a class="headerlink" href="#mais-opcoes" title="Link permanente para este título">¶</a></h2>
+<p>Para uma lista completa das opções que run-tests suporta, rode-o seguido de <code class="docutils literal"><span class="pre">--help</span></code>.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>~/php-src&gt; sapi/cli/php run-tests.php --help
+</pre></div>
+</div>
+</div>
+</div>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        «&#160;&#160;<a href="overview.html">Visão geral dos testes</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="../index.html">Conteúdos</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="phpt_file_structure.html">A estrutura de um arquivo <code class="docutils literal"><span class="pre">.phpt</span></code></a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2013, Julien Pauli - Anthony Ferrara - Nikita Popov - Tradução pt-br: Rogerio Prado de Jesus.
+    </div>
+  </body>
+</html>

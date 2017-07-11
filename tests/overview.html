@@ -1,0 +1,96 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt_BR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Visão geral dos testes &#8212; PHP Internals Book</title>
+    <link rel="stylesheet" href="../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/style.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <link rel="index" title="Índice" href="../genindex.html" />
+    <link rel="search" title="Buscar" href="../search.html" />
+    <link rel="next" title="Executando a suíte de testes" href="running_the_test_suite.html" />
+    <link rel="prev" title="Teste com arquivos .phpt" href="introduction.html" /> 
+  </head>
+  <body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../index.html">
+          <span>PHP Internals Book</span></a></h1>
+        <h2 class="heading"><span>Visão geral dos testes</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        «&#160;&#160;<a href="introduction.html">Teste com arquivos <code class="docutils literal"><span class="pre">.phpt</span></code></a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="../index.html">Conteúdos</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="running_the_test_suite.html">Executando a suíte de testes</a>&#160;&#160;»
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="visao-geral-dos-testes">
+<span id="overview"></span><h1>Visão geral dos testes<a class="headerlink" href="#visao-geral-dos-testes" title="Link permanente para este título">¶</a></h1>
+<p>O PHP tem uma suíte de testes extensa com mais de 15.000 arquivos de testes únicos. Os arquivos de teste são executados com a ferramenta de teste caixa-preta
+do PHP chamada <a class="reference external" href="https://github.com/php/php-src/blob/master/run-tests.php">run-tests.php</a> que pode ser encontrada no diretório raiz do código fonte do php.</p>
+<p>“Mas espere!” você diz, “Eu ouvi dizer que o fonte do PHP não tem nenhum teste unitário”. Você está certo. O código fonte do PHP tem
+zero testes unitários. Mas ele tem <a class="reference external" href="https://en.wikipedia.org/wiki/Functional_testing">testes funcionais</a> e para nossa sorte, esses testes funcionais em particular são escritos em
+PHP. Os arquivos de teste tem uma extensão <code class="docutils literal"><span class="pre">.phpt</span></code> e podem ser executados como qualquer outro arquivo PHP normalmente.</p>
+<p>A documentação oficial sobre a escrita de testes phpt fica em <a class="reference external" href="http://qa.php.net/write-test.php">qa.php.net</a>.</p>
+<div class="section" id="testes-caixa-preta">
+<h2>Testes caixa-preta<a class="headerlink" href="#testes-caixa-preta" title="Link permanente para este título">¶</a></h2>
+<p>Em poucas palavras, <cite>um teste caixa-preta</cite> envia uma entrada para alguma função e examina a saída depois que a função tiver terminado
+a execução. Se a saída corresponder com o que estávamos esperando, então o teste passou. O teste caixa-preta não se importa com <em>como</em>
+algo é feito, ele apenas se importa com o resultado final. É exatamente assim que o <code class="docutils literal"><span class="pre">run-tests.php</span></code> funciona; ele recebe um conjunto de
+entradas, executa algum código PHP e então examina a saída. Se a saída corresponder com o que era esperado, então o teste passa.</p>
+</div>
+<div class="section" id="onde-ficam-os-arquivos-de-teste">
+<h2>Onde ficam os arquivos de teste<a class="headerlink" href="#onde-ficam-os-arquivos-de-teste" title="Link permanente para este título">¶</a></h2>
+<p>Os arquivos de testes ficam em vários lugares diferentes dentro da base de código, em pastas chamadas <code class="docutils literal"><span class="pre">tests</span></code>. Cada pasta de teste
+contém arquivos <code class="docutils literal"><span class="pre">.phpt</span></code> pertinentes com o código contido na pasta.</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">ext/{extension-name}/tests/</span></code> Testes de uma extensão</li>
+<li><code class="docutils literal"><span class="pre">sapi/{sapi-name}/tests/</span></code> Testes da SAPI</li>
+<li><code class="docutils literal"><span class="pre">Zend/tests/</span></code> Testes da Zend engine</li>
+<li><code class="docutils literal"><span class="pre">tests/</span></code> Mais testes da Zend engine</li>
+</ul>
+</div>
+</div>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        «&#160;&#160;<a href="introduction.html">Teste com arquivos <code class="docutils literal"><span class="pre">.phpt</span></code></a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="../index.html">Conteúdos</a>
+        &#160;&#160;::&#160;&#160;
+        <a href="running_the_test_suite.html">Executando a suíte de testes</a>&#160;&#160;»
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2013, Julien Pauli - Anthony Ferrara - Nikita Popov - Tradução pt-br: Rogerio Prado de Jesus.
+    </div>
+  </body>
+</html>
